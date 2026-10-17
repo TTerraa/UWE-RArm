@@ -26,7 +26,24 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
 
-        if self.path == "/mode":
+        if self.path == "/":
+            from pathlib import Path
+
+            page = Path(__file__).with_name("index.html")
+            content = page.read_bytes()
+
+            self.send_response(200)
+            self.send_header(
+                "Content-Type", "text/html; charset=utf-8"
+            )
+            self.send_header(
+                "Content-Length", str(len(content))
+            )
+            self.end_headers()
+            self.wfile.write(content)
+            return
+
+        elif self.path == "/mode":
             self.send_response(200)
             self.send_header("Mode", arm_mode)
             self.end_headers()
